@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sylabs/compute-cli/internal/app/compute"
 )
- 
+
 var (
 	httpAddr string
 )
@@ -22,8 +22,10 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", ":8080", "Address to reach compute server")
+	rootCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach compute server")
 	rootCmd.AddCommand(compute.CreateCmd)
+	rootCmd.AddCommand(compute.DeleteCmd)
+	rootCmd.AddCommand(compute.ListCmd)
 }
 
 func main() {
@@ -31,4 +33,3 @@ func main() {
 		os.Exit(1)
 	}
 }
- 
