@@ -3,6 +3,7 @@ module github.com/sylabs/compute-cli
 go 1.13
 
 require (
+	github.com/coreos/etcd v3.3.10+incompatible
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/cobra v0.0.5
