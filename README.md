@@ -39,20 +39,23 @@ go build -o <path> ./...
 Finally, run a command:
 
 ```sh
-$ cmpctl --help
+$ cmpctl
 cmpctl enables control of workflows for the compute service.
 
 Usage:
-  cmpctl [flags]
   cmpctl [command]
 
 Available Commands:
   create      create enables you to submit a workflow to the compute service queue.
+  delete      delete allows you to remove a workflow from the compute service queue.
   help        Help about any command
+  info        info allows you to see a workflow's state within the compute service.
+  list        list allows you to list workflows within the compute service.
 
 Flags:
+  -d, --debug              Enable debug output
   -h, --help               help for cmpctl
-      --http_addr string   Address to reach compute server (default ":8080")
+      --http_addr string   Address to reach compute server (default "http://localhost:8080")
 
 Use "cmpctl [command] --help" for more information about a command.
 ```
