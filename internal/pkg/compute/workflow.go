@@ -9,6 +9,18 @@ type Workflow struct {
 	Name string `mapstructure:"name"`
 }
 
+type WorkflowEdge struct {
+	Node Workflow
+}
+
+type WorkflowConnection struct {
+	Edges []WorkflowEdge
+}
+
+type Viewer struct {
+	Workflows WorkflowConnection
+}
+
 func (wf Workflow) String() string {
 	return fmt.Sprintf("Name: %s, ID: %s", wf.Name, wf.Id)
 }

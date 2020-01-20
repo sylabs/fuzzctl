@@ -75,6 +75,19 @@ func (c *Client) Info(ctx context.Context, id string) (*Workflow, error) {
 }
 
 func (c *Client) List(ctx context.Context) ([]Workflow, error) {
-	// TODO: implement when endpoint is up
-	return nil, nil
+	lwf := struct {
+		Viewer `graphql:"viewer"`
+	}{}
+
+	err := c.Query(ctx, &lwf, nil)
+	if err != nil {
+		return nil, fmt.Errorf("while getting workflow state: %w", err)
+	}
+
+	var wfs []Workflow
+	for _, w := range lwf.Viewer.Workflows.Edges {
+		wfs = append(wfs, Workflow{Id: w.Node.Id, Name: w.Node.Name})
+	}
+
+	return wfs, nil
 }

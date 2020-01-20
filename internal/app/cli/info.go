@@ -11,6 +11,7 @@ import (
 var infoCmd = &cobra.Command{
 	Use:   "info <ID>",
 	Short: "info allows you to see a workflow's state within the compute service.",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		id := args[0]
 

@@ -11,6 +11,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create <NAME>",
 	Short: "create enables you to submit a workflow to the compute service queue.",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 
