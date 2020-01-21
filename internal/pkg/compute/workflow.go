@@ -4,9 +4,18 @@ package compute
 
 import "fmt"
 
+type User struct {
+	Id    string
+	Login string
+}
+
 type Workflow struct {
-	Id   string `mapstructure:"id"`
-	Name string `mapstructure:"name"`
+	Id         string
+	Name       string
+	CreatedBy  User
+	CreatedAt  string
+	StartedAt  string
+	FinishedAt string
 }
 
 type WorkflowEdge struct {

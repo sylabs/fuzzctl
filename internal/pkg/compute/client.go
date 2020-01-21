@@ -86,7 +86,7 @@ func (c *Client) List(ctx context.Context) ([]Workflow, error) {
 
 	var wfs []Workflow
 	for _, w := range lwf.Viewer.Workflows.Edges {
-		wfs = append(wfs, Workflow{Id: w.Node.Id, Name: w.Node.Name})
+		wfs = append(wfs, w.Node)
 	}
 
 	return wfs, nil
