@@ -91,3 +91,16 @@ func (c *Client) List(ctx context.Context) ([]Workflow, error) {
 
 	return wfs, nil
 }
+
+func (c *Client) ServerInfo(ctx context.Context) (*ServerInfo, error) {
+	si := struct {
+		ServerInfo `graphql:"systemInfo"`
+	}{}
+
+	err := c.Query(ctx, &si, nil)
+	if err != nil {
+		return nil, fmt.Errorf("while getting server information: %w", err)
+	}
+
+	return &si.ServerInfo, nil
+}
