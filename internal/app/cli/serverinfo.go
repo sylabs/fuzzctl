@@ -10,7 +10,7 @@ import (
 
 var serverInfoCmd = &cobra.Command{
 	Use:   "serverinfo",
-	Short: "serverinfo enables you to view the properties of a Compute Service.",
+	Short: "serverinfo enables you to view the properties of a compute service.",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 
