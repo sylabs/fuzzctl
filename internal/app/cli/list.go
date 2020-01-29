@@ -27,7 +27,7 @@ var listCmd = &cobra.Command{
 	Short: "list allows you to list workflows within the compute service.",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		wfs, err := c.List(context.TODO())
+		wfs, err := c.List(context.Background())
 		if err != nil {
 			logrus.Fatal(err)
 		}

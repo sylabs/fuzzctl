@@ -15,7 +15,7 @@ var infoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		id := args[0]
 
-		wf, err := c.Info(context.TODO(), id)
+		wf, err := c.Info(context.Background(), id)
 		if err != nil {
 			logrus.Fatal(err)
 		}

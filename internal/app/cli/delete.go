@@ -15,7 +15,7 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		id := args[0]
 
-		wf, err := c.Delete(context.TODO(), id)
+		wf, err := c.Delete(context.Background(), id)
 		if err != nil {
 			logrus.Fatal(err)
 		}

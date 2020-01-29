@@ -1,0 +1,7 @@
+version: 0.1
+workflow:
+  name: mvp2
+  jobs:
+    date: 
+      image: library://alpine:latest
+      command: ["date"]

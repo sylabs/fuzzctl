@@ -20,13 +20,13 @@ func NewClient(serverURL string) *Client {
 	return &Client{graphql.NewClient(endpoint, nil)}
 }
 
-func (c *Client) Create(ctx context.Context, name string) (*Workflow, error) {
+func (c *Client) Create(ctx context.Context, w *WorkflowSpec) (*Workflow, error) {
 	variables := map[string]interface{}{
-		"name": graphql.String(name),
+		"workflowSpec": *w,
 	}
 
 	cwf := struct {
-		Workflow `graphql:"createWorkflow(name: $name)"`
+		Workflow `graphql:"createWorkflow(spec: $workflowSpec)"`
 	}{}
 
 	err := c.Mutate(ctx, &cwf, variables)

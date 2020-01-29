@@ -14,7 +14,7 @@ var serverInfoCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 
-		si, err := c.ServerInfo(context.TODO())
+		si, err := c.ServerInfo(context.Background())
 		if err != nil {
 			logrus.Fatal(err)
 		}
