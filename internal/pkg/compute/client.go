@@ -5,10 +5,13 @@ package compute
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/shurcooL/graphql"
 	"github.com/sirupsen/logrus"
 )
+
+const userAgent = "compute-cli/0.1"
 
 type Client struct {
 	*graphql.Client
@@ -17,7 +20,9 @@ type Client struct {
 func NewClient(serverURL string) *Client {
 	endpoint := fmt.Sprintf("%s/graphql", serverURL)
 	logrus.Debugf("Creating graphql client for: %s", endpoint)
-	return &Client{graphql.NewClient(endpoint, nil)}
+	return &Client{graphql.NewClient(endpoint, &http.Client{
+		Transport: setUserAgent(http.DefaultTransport, userAgent),
+	})}
 }
 
 func (c *Client) Create(ctx context.Context, w *WorkflowSpec) (*Workflow, error) {
