@@ -8,6 +8,8 @@ import "fmt"
 // in order to correctly parse input objects into the correct format
 // for graphql to consume, note these tags are case sensitive.
 
+// TODO: break this out into another package as it's getting large
+
 type JobSpec struct {
 	Name    string   `json:"name"`
 	Image   string   `json:"image"`
@@ -24,6 +26,23 @@ type User struct {
 	Login string
 }
 
+type Job struct {
+	Id       string
+	Name     string
+	Image    string
+	Command  []string
+	Status   string
+	ExitCode *int32
+}
+
+type JobEdge struct {
+	Node Job
+}
+
+type JobConnection struct {
+	Edges []JobEdge
+}
+
 type Workflow struct {
 	Id         string
 	Name       string
@@ -31,6 +50,8 @@ type Workflow struct {
 	CreatedAt  string
 	StartedAt  string
 	FinishedAt string
+	Status     string
+	Jobs       JobConnection
 }
 
 type WorkflowEdge struct {

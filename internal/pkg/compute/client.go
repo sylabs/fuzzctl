@@ -10,6 +10,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// TODO: Refactor this package to use multiple struct for same representations.
+// Having Workflow container JobsConnection does not give the correct level of
+// abstraction to the package user.
+
 type Client struct {
 	*graphql.Client
 }

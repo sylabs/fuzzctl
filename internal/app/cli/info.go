@@ -3,10 +3,15 @@ package cli
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"text/tabwriter"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
+
+const infoLineFmt = "%s\t%s\t%s\t%s\n"
 
 var infoCmd = &cobra.Command{
 	Use:   "info <ID>",
@@ -20,6 +25,18 @@ var infoCmd = &cobra.Command{
 			logrus.Fatal(err)
 		}
 
-		logrus.Infof("Workflow: %s\n", wf)
+		// TODO: verbose output
+		fmt.Printf("ID: %s\nNAME: %s\nJOBS:\n", wf.Id, wf.Name)
+		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+		fmt.Fprintf(tw, infoLineFmt, "NAME", "ID", "STATUS", "EXITCODE")
+		for _, je := range wf.Jobs.Edges {
+			j := je.Node
+			exitCode := "N/A"
+			if j.ExitCode != nil {
+				exitCode = fmt.Sprintf("%d", *j.ExitCode)
+			}
+			fmt.Fprintf(tw, infoLineFmt, j.Name, j.Id, j.Status, exitCode)
+		}
+		tw.Flush()
 	},
 }
