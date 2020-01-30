@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"reflect"
 	"testing"
+
+	"github.com/sylabs/compute-cli/internal/pkg/schema"
 )
 
 func TestParseSpec(t *testing.T) {
@@ -21,10 +23,10 @@ func TestParseSpec(t *testing.T) {
 		t.Error(err)
 	}
 
-	correct := &WorkflowSpec{
+	correct := &schema.WorkflowSpec{
 		Name: "mvp2",
-		Jobs: []JobSpec{
-			JobSpec{
+		Jobs: []schema.JobSpec{
+			schema.JobSpec{
 				Name:    "date",
 				Image:   "library://alpine:latest",
 				Command: []string{"date"},

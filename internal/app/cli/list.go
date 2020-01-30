@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const lineFmt = "%s\t%s\t%s\n"
-const verboseLineFmt = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n"
+const listLineFmt = "%s\t%s\t%s\n"
+const verboseListLineFmt = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n"
 
 var (
 	verbose bool
@@ -36,7 +36,7 @@ var listCmd = &cobra.Command{
 		// would make it cleaner to supply N/A when no time is available
 		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 		if verbose {
-			fmt.Fprintf(tw, verboseLineFmt, "NAME", "ID", "OWNER", "OWNER ID", "STATUS", "CREATED", "STARTED", "FINISHED")
+			fmt.Fprintf(tw, verboseListLineFmt, "NAME", "ID", "OWNER", "OWNER ID", "STATUS", "CREATED", "STARTED", "FINISHED")
 			for _, w := range wfs {
 				if w.StartedAt == "" {
 					w.StartedAt = "N/A"
@@ -44,12 +44,12 @@ var listCmd = &cobra.Command{
 				if w.FinishedAt == "" {
 					w.FinishedAt = "N/A"
 				}
-				fmt.Fprintf(tw, verboseLineFmt, w.Name, w.Id, w.CreatedBy.Login, w.CreatedBy.Id, "QUEUED", w.CreatedAt, w.StartedAt, w.FinishedAt)
+				fmt.Fprintf(tw, verboseListLineFmt, w.Name, w.Id, w.CreatedBy.Login, w.CreatedBy.Id, w.Status, w.CreatedAt, w.StartedAt, w.FinishedAt)
 			}
 		} else {
-			fmt.Fprintf(tw, lineFmt, "NAME", "ID", "STATUS")
+			fmt.Fprintf(tw, listLineFmt, "NAME", "ID", "STATUS")
 			for _, w := range wfs {
-				fmt.Fprintf(tw, lineFmt, w.Name, w.Id, "QUEUED")
+				fmt.Fprintf(tw, listLineFmt, w.Name, w.Id, w.Status)
 			}
 		}
 		tw.Flush()

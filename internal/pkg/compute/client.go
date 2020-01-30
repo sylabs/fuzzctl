@@ -9,6 +9,7 @@ import (
 
 	"github.com/shurcooL/graphql"
 	"github.com/sirupsen/logrus"
+	"github.com/sylabs/compute-cli/internal/pkg/schema"
 )
 
 const userAgent = "compute-cli/0.1"
@@ -25,87 +26,86 @@ func NewClient(serverURL string) *Client {
 	})}
 }
 
-func (c *Client) Create(ctx context.Context, w *WorkflowSpec) (*Workflow, error) {
+func (c *Client) Create(ctx context.Context, spec schema.WorkflowSpec) (Workflow, error) {
 	variables := map[string]interface{}{
-		"workflowSpec": *w,
+		"workflowSpec": spec,
 	}
 
-	cwf := struct {
-		Workflow `graphql:"createWorkflow(spec: $workflowSpec)"`
+	m := struct {
+		schema.Workflow `graphql:"createWorkflow(spec: $workflowSpec)"`
 	}{}
 
-	err := c.Mutate(ctx, &cwf, variables)
+	err := c.Mutate(ctx, &m, variables)
 	if err != nil {
-		return nil, fmt.Errorf("while creating workflow: %w", err)
+		return Workflow{}, fmt.Errorf("while creating workflow: %w", err)
 	}
 
-	return &cwf.Workflow, nil
+	return convertWorkflow(m.Workflow), nil
 }
 
-func (c *Client) Delete(ctx context.Context, id string) (*Workflow, error) {
-
+func (c *Client) Delete(ctx context.Context, id string) (Workflow, error) {
 	variables := map[string]interface{}{
 		"id": graphql.ID(id),
 	}
 
-	dwf := struct {
-		Workflow `graphql:"deleteWorkflow(id: $id)"`
+	m := struct {
+		schema.Workflow `graphql:"deleteWorkflow(id: $id)"`
 	}{}
 
 	// TODO: gracefully catch case where the workflow does not exist
-	err := c.Mutate(ctx, &dwf, variables)
+	err := c.Mutate(ctx, &m, variables)
 	if err != nil {
-		return nil, fmt.Errorf("while deleting workflow: %w", err)
+		return Workflow{}, fmt.Errorf("while deleting workflow: %w", err)
 	}
 
-	return &dwf.Workflow, nil
+	return convertWorkflow(m.Workflow), nil
 }
 
-func (c *Client) Info(ctx context.Context, id string) (*Workflow, error) {
+func (c *Client) Info(ctx context.Context, id string) (Workflow, error) {
 	variables := map[string]interface{}{
 		"id": graphql.ID(id),
 	}
 
-	iwf := struct {
-		Workflow `graphql:"workflow(id: $id)"`
+	q := struct {
+		schema.Workflow `graphql:"workflow(id: $id)"`
 	}{}
 
 	// TODO: gracefully catch case where the workflow does not exist
-	err := c.Query(ctx, &iwf, variables)
+	err := c.Query(ctx, &q, variables)
 	if err != nil {
-		return nil, fmt.Errorf("while getting workflow state: %w", err)
+		return Workflow{}, fmt.Errorf("while getting workflow state: %w", err)
 	}
 
-	return &iwf.Workflow, nil
+	return convertWorkflow(q.Workflow), nil
 }
 
 func (c *Client) List(ctx context.Context) ([]Workflow, error) {
-	lwf := struct {
-		Viewer `graphql:"viewer"`
+	q := struct {
+		schema.Viewer `graphql:"viewer"`
 	}{}
 
-	err := c.Query(ctx, &lwf, nil)
+	err := c.Query(ctx, &q, nil)
 	if err != nil {
 		return nil, fmt.Errorf("while getting workflow state: %w", err)
 	}
 
 	var wfs []Workflow
-	for _, w := range lwf.Viewer.Workflows.Edges {
-		wfs = append(wfs, w.Node)
+	for _, w := range q.Viewer.Workflows.Edges {
+		wfs = append(wfs, convertWorkflow(w.Node))
 	}
 
 	return wfs, nil
 }
 
-func (c *Client) ServerInfo(ctx context.Context) (*ServerInfo, error) {
-	si := struct {
+func (c *Client) ServerInfo(ctx context.Context) (ServerInfo, error) {
+	q := struct {
 		ServerInfo `graphql:"systemInfo"`
 	}{}
 
-	err := c.Query(ctx, &si, nil)
+	err := c.Query(ctx, &q, nil)
 	if err != nil {
-		return nil, fmt.Errorf("while getting server information: %w", err)
+		return ServerInfo{}, fmt.Errorf("while getting server information: %w", err)
 	}
 
-	return &si.ServerInfo, nil
+	return q.ServerInfo, nil
 }
