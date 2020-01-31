@@ -1,6 +1,6 @@
 version: 0.1
 workflow:
-  name: mvp2
+  name: SingleJob
   jobs:
     date: 
       image: library://alpine:latest

@@ -5,21 +5,22 @@ package compute
 import "fmt"
 
 type User struct {
-	Id    string
+	ID    string
 	Login string
 }
 
 type Job struct {
-	Id       string
+	ID       string
 	Name     string
 	Image    string
 	Command  []string
 	Status   string
 	ExitCode *int32
+	Requires []Job
 }
 
 type Workflow struct {
-	Id         string
+	ID         string
 	Name       string
 	CreatedBy  User
 	CreatedAt  string
@@ -34,5 +35,5 @@ type Viewer struct {
 }
 
 func (wf Workflow) String() string {
-	return fmt.Sprintf("Name: %s, ID: %s", wf.Name, wf.Id)
+	return fmt.Sprintf("Name: %s, ID: %s", wf.Name, wf.ID)
 }

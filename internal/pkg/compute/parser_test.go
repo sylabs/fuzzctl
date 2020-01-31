@@ -3,7 +3,9 @@
 package compute
 
 import (
+	"encoding/json"
 	"io/ioutil"
+	"path/filepath"
 	"reflect"
 	"testing"
 
@@ -11,30 +13,70 @@ import (
 )
 
 func TestParseSpec(t *testing.T) {
-	data, err := ioutil.ReadFile("./testdata/parserdata/singlejob.yaml")
-	if err != nil {
-		t.Error(err)
-	}
+	testDataDir := "./testdata/parser"
 
-	t.Logf(string(data))
-
-	spec, err := ParseSpec(data)
-	if err != nil {
-		t.Error(err)
-	}
-
-	correct := &schema.WorkflowSpec{
-		Name: "mvp2",
-		Jobs: []schema.JobSpec{
-			schema.JobSpec{
-				Name:    "date",
-				Image:   "library://alpine:latest",
-				Command: []string{"date"},
-			},
+	tests := []struct {
+		name    string
+		input   string
+		golden  string
+		wantErr bool
+	}{
+		{
+			name:    "Single Job",
+			input:   "single.yaml",
+			golden:  "single.json",
+			wantErr: false,
+		},
+		{
+			name:    "Multiple Jobs",
+			input:   "multiple.yaml",
+			golden:  "multiple.json",
+			wantErr: false,
+		},
+		{
+			name:    "Dependent Jobs",
+			input:   "dependent.yaml",
+			golden:  "dependent.json",
+			wantErr: false,
+		},
+		{
+			name:    "Unknown Field",
+			input:   "unknownfield.yaml",
+			golden:  "",
+			wantErr: true,
 		},
 	}
 
-	if !reflect.DeepEqual(spec, correct) {
-		t.Errorf("Workflow spec incorrectly parsed:\nCorrect:\n%v\nParsed:\n%v", correct, spec)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			d, err := ioutil.ReadFile(filepath.Join(testDataDir, "input", tt.input))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			spec, err := ParseSpec(d)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("got err %v, wantErr %v", err, tt.wantErr)
+			}
+
+			// stop if we got the error we wanted
+			if tt.wantErr {
+				return
+			}
+
+			gd, err := ioutil.ReadFile(filepath.Join(testDataDir, "golden", tt.golden))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			var golden schema.WorkflowSpec
+			if err := json.Unmarshal(gd, &golden); err != nil {
+				t.Fatal(err)
+			}
+
+			if !reflect.DeepEqual(spec, golden) {
+				t.Fatalf("Workflow spec incorrectly parsed:\nGolden:\n%v\nParsed:\n%v", golden, spec)
+			}
+		})
 	}
 }

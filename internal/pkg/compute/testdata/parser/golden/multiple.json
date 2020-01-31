@@ -1,0 +1,23 @@
+{
+	"name": "MultipleJobs",
+	"jobs": [
+		{
+			"name": "date",
+			"image": "library://alpine:latest",
+			"command": [
+				"date"
+			],
+			"requires": null
+		},
+		{
+			"name": "hello",
+			"image": "library://alpine:latest",
+			"command": [
+				"echo",
+				"-n",
+				"Hello, world!"
+			],
+			"requires": null
+		}
+	]
+}

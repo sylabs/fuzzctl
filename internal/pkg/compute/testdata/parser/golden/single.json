@@ -1,0 +1,13 @@
+{
+	"name": "SingleJob",
+	"jobs": [
+		{
+			"name": "date",
+			"image": "library://alpine:latest",
+			"command": [
+				"date"
+			],
+			"requires": null
+		}
+	]
+}

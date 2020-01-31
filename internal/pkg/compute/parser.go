@@ -4,6 +4,7 @@ package compute
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/sylabs/compute-cli/internal/pkg/schema"
 	"gopkg.in/yaml.v2"
@@ -30,7 +31,7 @@ func ParseSpec(b []byte) (schema.WorkflowSpec, error) {
 		Workflow workflowSpecIntermediate
 	}{}
 
-	if err := yaml.Unmarshal(b, &s); err != nil {
+	if err := yaml.UnmarshalStrict(b, &s); err != nil {
 		return schema.WorkflowSpec{}, err
 	}
 
@@ -45,6 +46,9 @@ func ParseSpec(b []byte) (schema.WorkflowSpec, error) {
 		j.Name = n
 		w.Jobs = append(w.Jobs, *j)
 	}
+
+	// sort slice by name to ensure deterministic specs
+	sort.Slice(w.Jobs, func(i, j int) bool { return w.Jobs[i].Name < w.Jobs[j].Name })
 
 	return w, nil
 }

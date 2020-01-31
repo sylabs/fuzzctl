@@ -1,0 +1,10 @@
+version: 0.1
+workflow:
+  name: MultipleJobs
+  jobs:
+    date: 
+      image: library://alpine:latest
+      command: ["date"]
+    hello:
+      image: library://alpine:latest
+      command: ["echo", "-n", "Hello, world!"]
