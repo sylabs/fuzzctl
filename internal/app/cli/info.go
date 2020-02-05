@@ -26,7 +26,7 @@ var infoCmd = &cobra.Command{
 		}
 
 		// TODO: verbose output
-		fmt.Printf("ID: %s\nNAME: %s\nJOBS:\n", wf.Id, wf.Name)
+		fmt.Printf("ID: %s\nNAME: %s\nJOBS:\n", wf.ID, wf.Name)
 		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 		fmt.Fprintf(tw, infoLineFmt, "NAME", "ID", "STATUS", "EXITCODE")
 		for _, j := range wf.Jobs {
@@ -34,7 +34,7 @@ var infoCmd = &cobra.Command{
 			if j.ExitCode != nil {
 				exitCode = fmt.Sprintf("%d", *j.ExitCode)
 			}
-			fmt.Fprintf(tw, infoLineFmt, j.Name, j.Id, j.Status, exitCode)
+			fmt.Fprintf(tw, infoLineFmt, j.Name, j.ID, j.Status, exitCode)
 		}
 		tw.Flush()
 	},

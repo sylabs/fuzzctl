@@ -10,12 +10,12 @@ type WorkflowSpec struct {
 }
 
 type User struct {
-	Id    string
+	ID    string
 	Login string
 }
 
 type Workflow struct {
-	Id         string
+	ID         string
 	Name       string
 	CreatedBy  User
 	CreatedAt  string

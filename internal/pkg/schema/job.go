@@ -5,13 +5,14 @@ package schema
 // JobSpec is an input so it requires json struct tags to have
 // correct capitalization when used with github.com/shurcooL/graphql
 type JobSpec struct {
-	Name    string   `json:"name"`
-	Image   string   `json:"image"`
-	Command []string `json:"command"`
+	Name     string   `json:"name"`
+	Image    string   `json:"image"`
+	Command  []string `json:"command"`
+	Requires []string `json:"requires"`
 }
 
 type Job struct {
-	Id       string
+	ID       string
 	Name     string
 	Image    string
 	Command  []string

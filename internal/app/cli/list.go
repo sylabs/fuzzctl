@@ -44,12 +44,12 @@ var listCmd = &cobra.Command{
 				if w.FinishedAt == "" {
 					w.FinishedAt = "N/A"
 				}
-				fmt.Fprintf(tw, verboseListLineFmt, w.Name, w.Id, w.CreatedBy.Login, w.CreatedBy.Id, w.Status, w.CreatedAt, w.StartedAt, w.FinishedAt)
+				fmt.Fprintf(tw, verboseListLineFmt, w.Name, w.ID, w.CreatedBy.Login, w.CreatedBy.ID, w.Status, w.CreatedAt, w.StartedAt, w.FinishedAt)
 			}
 		} else {
 			fmt.Fprintf(tw, listLineFmt, "NAME", "ID", "STATUS")
 			for _, w := range wfs {
-				fmt.Fprintf(tw, listLineFmt, w.Name, w.Id, w.Status)
+				fmt.Fprintf(tw, listLineFmt, w.Name, w.ID, w.Status)
 			}
 		}
 		tw.Flush()

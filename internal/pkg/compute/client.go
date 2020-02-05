@@ -32,7 +32,10 @@ func (c *Client) Create(ctx context.Context, spec schema.WorkflowSpec) (Workflow
 	}
 
 	m := struct {
-		schema.Workflow `graphql:"createWorkflow(spec: $workflowSpec)"`
+		Workflow struct {
+			ID   string
+			Name string
+		} `graphql:"createWorkflow(spec: $workflowSpec)"`
 	}{}
 
 	err := c.Mutate(ctx, &m, variables)
@@ -40,7 +43,7 @@ func (c *Client) Create(ctx context.Context, spec schema.WorkflowSpec) (Workflow
 		return Workflow{}, fmt.Errorf("while creating workflow: %w", err)
 	}
 
-	return convertWorkflow(m.Workflow), nil
+	return Workflow{ID: m.Workflow.ID, Name: m.Workflow.Name}, nil
 }
 
 func (c *Client) Delete(ctx context.Context, id string) (Workflow, error) {
@@ -49,7 +52,10 @@ func (c *Client) Delete(ctx context.Context, id string) (Workflow, error) {
 	}
 
 	m := struct {
-		schema.Workflow `graphql:"deleteWorkflow(id: $id)"`
+		Workflow struct {
+			ID   string
+			Name string
+		} `graphql:"deleteWorkflow(id: $id)"`
 	}{}
 
 	// TODO: gracefully catch case where the workflow does not exist
@@ -58,7 +64,7 @@ func (c *Client) Delete(ctx context.Context, id string) (Workflow, error) {
 		return Workflow{}, fmt.Errorf("while deleting workflow: %w", err)
 	}
 
-	return convertWorkflow(m.Workflow), nil
+	return Workflow{ID: m.Workflow.ID, Name: m.Workflow.Name}, nil
 }
 
 func (c *Client) Info(ctx context.Context, id string) (Workflow, error) {

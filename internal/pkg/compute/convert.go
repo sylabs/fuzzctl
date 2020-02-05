@@ -4,10 +4,10 @@ package compute
 
 import "github.com/sylabs/compute-cli/internal/pkg/schema"
 
-// convertWorkflow returns a populates workflow structure given a
+// convertWorkflow returns a populated workflow structure given a
 // GraphQL formated workflow structure
 func convertWorkflow(sw schema.Workflow) (w Workflow) {
-	w.Id = sw.Id
+	w.ID = sw.ID
 	w.Name = sw.Name
 	w.CreatedBy = User(sw.CreatedBy)
 	w.CreatedAt = sw.CreatedAt
@@ -15,8 +15,21 @@ func convertWorkflow(sw schema.Workflow) (w Workflow) {
 	w.FinishedAt = sw.FinishedAt
 	w.Status = sw.Status
 	for _, je := range sw.Jobs.Edges {
-		w.Jobs = append(w.Jobs, Job(je.Node))
+		w.Jobs = append(w.Jobs, convertJob(je.Node))
 	}
 
 	return w
+}
+
+// convertJob returns a populated job structure given a
+// GraphQl formated job structure
+func convertJob(sj schema.Job) (j Job) {
+	j.ID = sj.ID
+	j.Name = sj.Name
+	j.Image = sj.Image
+	j.Command = sj.Command
+	j.Status = sj.Status
+	j.ExitCode = sj.ExitCode
+
+	return j
 }

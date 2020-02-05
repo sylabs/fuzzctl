@@ -1,0 +1,27 @@
+{
+	"name": "DependentJobs",
+	"jobs": [
+		{
+			"name": "date",
+			"image": "library://alpine:latest",
+			"command": [
+				"date",
+				"\u003e",
+				"/data/time"
+			],
+			"requires": null
+		},
+		{
+			"name": "hello",
+			"image": "library://alpine:latest",
+			"command": [
+				"echo",
+				"-n",
+				"Hello, world, the time is $(cat /share/time)"
+			],
+			"requires": [
+				"date"
+			]
+		}
+	]
+}
