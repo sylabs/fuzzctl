@@ -5,25 +5,27 @@ package compute
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/shurcooL/graphql"
 	"github.com/sirupsen/logrus"
 	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"golang.org/x/oauth2"
 )
 
-const userAgent = "compute-cli/0.1"
+const (
+	userAgent = "compute-cli/0.1"
+)
 
 type Client struct {
 	*graphql.Client
 }
 
-func NewClient(serverURL string) *Client {
+func NewClient(ctx context.Context, ts oauth2.TokenSource, serverURL string) *Client {
 	endpoint := fmt.Sprintf("%s/graphql", serverURL)
 	logrus.Debugf("Creating graphql client for: %s", endpoint)
-	return &Client{graphql.NewClient(endpoint, &http.Client{
-		Transport: setUserAgent(http.DefaultTransport, userAgent),
-	})}
+	c := oauth2.NewClient(ctx, ts)
+	c.Transport = setUserAgent(c.Transport, userAgent)
+	return &Client{graphql.NewClient(endpoint, c)}
 }
 
 func (c *Client) Create(ctx context.Context, spec schema.WorkflowSpec) (Workflow, error) {
