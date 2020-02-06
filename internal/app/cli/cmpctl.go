@@ -1,9 +1,12 @@
 package cli
 
 import (
+	"context"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/sylabs/compute-cli/internal/pkg/compute"
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -23,8 +26,13 @@ var CmpctlCmd = &cobra.Command{
 			logrus.SetLevel(logrus.DebugLevel)
 		}
 
+		// TODO: OAuth2 token source.
+		ts := oauth2.StaticTokenSource(&oauth2.Token{
+			AccessToken: "accesstoken",
+		})
+
 		// initialize global client for subcommands to leverage
-		c = compute.NewClient(httpAddr)
+		c = compute.NewClient(context.TODO(), ts, httpAddr)
 	},
 }
 
