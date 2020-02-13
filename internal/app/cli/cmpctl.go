@@ -102,4 +102,5 @@ func init() {
 	CmpctlCmd.AddCommand(listCmd)
 	CmpctlCmd.AddCommand(serverInfoCmd)
 	CmpctlCmd.AddCommand(loginCmd)
+	CmpctlCmd.AddCommand(logoutCmd)
 }
