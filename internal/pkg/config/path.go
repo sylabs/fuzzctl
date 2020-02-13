@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	appName  = "fuzzbomb"
+	appName  = "fuzzball"
 	fileName = "config.yaml"
 )
 
