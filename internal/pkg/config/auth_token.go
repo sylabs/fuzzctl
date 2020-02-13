@@ -24,10 +24,7 @@ func (r *remote) SetToken(t *oauth2.Token) error {
 		r.AuthToken.RefreshToken = t.RefreshToken
 		r.AuthToken.Expiry = t.Expiry
 	} else {
-		r.AuthToken.AccessToken = ""
-		r.AuthToken.TokenType = ""
-		r.AuthToken.RefreshToken = ""
-		r.AuthToken.Expiry = time.Time{}
+		r.AuthToken = authToken{}
 	}
 	return nil
 }

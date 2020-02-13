@@ -2,11 +2,18 @@
 
 package config
 
-import "golang.org/x/oauth2"
+import (
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
+)
 
 // Remote defines the operations that can be performed on a remote config.
 type Remote interface {
-	GetOAuth2Config() *oauth2.Config
+	GetAuthType() string
+	SetAuthType(string) error
+
+	GetAuthCodePKCEConfig() *oauth2.Config
+	GetClientCredentialsConfig() *clientcredentials.Config
 
 	GetToken() *oauth2.Token
 	SetToken(t *oauth2.Token) error

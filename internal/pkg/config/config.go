@@ -31,6 +31,7 @@ func Default() (*Config, error) {
 				"default": {
 					BaseURI: "http://localhost:8080",
 					AuthConfig: authConfig{
+						Type:             AuthConfigTypeAuthCodePKCE,
 						ClientID:         "0oa24wwhwBWYa1T804x6",
 						AuthURL:          "https://dev-930666.okta.com/oauth2/default/v1/authorize",
 						TokenURL:         "https://dev-930666.okta.com/oauth2/default/v1/token",
