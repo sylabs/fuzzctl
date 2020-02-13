@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/sylabs/compute-cli/internal/pkg/auth"
 	"github.com/sylabs/compute-cli/internal/pkg/browse"
+	"github.com/sylabs/compute-cli/internal/pkg/config"
 	"golang.org/x/oauth2"
 )
 
@@ -22,7 +23,7 @@ var loginCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		c := ar.GetOAuth2Config()
+		c := ar.GetAuthCodePKCEConfig()
 		c.Scopes = []string{"offline_access"} // TODO: request additional scopes
 
 		// Do interactive login.
@@ -31,6 +32,7 @@ var loginCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		ar.SetAuthType(config.AuthConfigTypeAuthCodePKCE)
 
 		// Update token source to specify the newly obtained token.
 		tokenSrc = oauth2.StaticTokenSource(tok)

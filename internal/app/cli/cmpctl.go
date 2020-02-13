@@ -66,7 +66,15 @@ var CmpctlCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("Failed to get active remote: %w", err)
 		}
-		tokenSrc = r.GetOAuth2Config().TokenSource(ctx, r.GetToken())
+
+		switch t := r.GetAuthType(); t {
+		case config.AuthConfigTypeAuthCodePKCE:
+			tokenSrc = r.GetAuthCodePKCEConfig().TokenSource(ctx, r.GetToken())
+		case config.AuthConfigTypeClientCredentials:
+			tokenSrc = r.GetClientCredentialsConfig().TokenSource(ctx)
+		default:
+			return fmt.Errorf("Unknown auth configuration type: %v", t)
+		}
 
 		// initialize global client for subcommands to leverage
 		c = compute.NewClient(ctx, tokenSrc, httpAddr)
