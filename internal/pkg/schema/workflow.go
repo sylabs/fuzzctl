@@ -5,8 +5,9 @@ package schema
 // WorkflowSpec is an input so it requires json struct tags to have
 // correct capitalization when used with github.com/shurcooL/graphql
 type WorkflowSpec struct {
-	Name string    `json:"name"`
-	Jobs []JobSpec `json:"jobs"`
+	Name    string       `json:"name"`
+	Jobs    []JobSpec    `json:"jobs"`
+	Volumes []VolumeSpec `json:"volumes"`
 }
 
 type User struct {

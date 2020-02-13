@@ -40,6 +40,12 @@ func TestParseSpec(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name:    "Volumes",
+			input:   "volume.yaml",
+			golden:  "volume.json",
+			wantErr: false,
+		},
+		{
 			name:    "Unknown Field",
 			input:   "unknownfield.yaml",
 			golden:  "",

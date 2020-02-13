@@ -16,8 +16,17 @@ const specVersion = "0.1"
 // yaml specification accepting an map of structs while the
 // graphQL api expects a list
 type workflowSpecIntermediate struct {
-	Name string
-	Jobs map[string]*schema.JobSpec
+	Name    string
+	Jobs    map[string]*jobSpecIntermediate
+	Volumes map[string]*schema.VolumeSpec
+}
+
+type jobSpecIntermediate struct {
+	Name     string
+	Image    string
+	Command  []string
+	Requires []string
+	Volumes  map[string]*schema.VolumeRequirement
 }
 
 // ParseSpec converts a yaml specification for a workflow
@@ -42,13 +51,28 @@ func ParseSpec(b []byte) (schema.WorkflowSpec, error) {
 	// convert intermediate structure
 	var w schema.WorkflowSpec
 	w.Name = s.Workflow.Name
-	for n, j := range s.Workflow.Jobs {
+	for n, ji := range s.Workflow.Jobs {
+		var j schema.JobSpec
 		j.Name = n
-		w.Jobs = append(w.Jobs, *j)
+		j.Image = ji.Image
+		j.Command = ji.Command
+		j.Requires = ji.Requires
+		for n, vr := range ji.Volumes {
+			vr.Name = n
+			j.Volumes = append(j.Volumes, *vr)
+		}
+
+		sort.Slice(j.Volumes, func(i, k int) bool { return j.Volumes[i].Name < j.Volumes[k].Name })
+		w.Jobs = append(w.Jobs, j)
+	}
+	for n, v := range s.Workflow.Volumes {
+		v.Name = n
+		w.Volumes = append(w.Volumes, *v)
 	}
 
-	// sort slice by name to ensure deterministic specs
+	// sort slices by name to ensure deterministic specs
 	sort.Slice(w.Jobs, func(i, j int) bool { return w.Jobs[i].Name < w.Jobs[j].Name })
+	sort.Slice(w.Volumes, func(i, j int) bool { return w.Volumes[i].Name < w.Volumes[j].Name })
 
 	return w, nil
 }

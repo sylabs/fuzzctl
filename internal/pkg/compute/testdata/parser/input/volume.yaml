@@ -1,0 +1,20 @@
+version: 0.1
+workflow:
+  name: Volumes
+  jobs:
+    date:
+      image: library://alpine:latest
+      command: ["date", ">", "/data/time"]
+      volumes:
+        v1:
+          location: "/data"
+    hello:
+      image: library://alpine:latest
+      command: ["echo", "-n", "Hello, world, the time is $(cat /share/time)"]
+      requires: ["date"]
+      volumes:
+        v1:
+          location: "/share"
+  volumes:
+    v1:
+      type: "ephemeral"
