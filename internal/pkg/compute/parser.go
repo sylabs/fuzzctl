@@ -3,11 +3,12 @@
 package compute
 
 import (
+	"bytes"
 	"fmt"
 	"sort"
 
 	"github.com/sylabs/compute-cli/internal/pkg/schema"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 const specVersion = "0.1"
@@ -40,7 +41,9 @@ func ParseSpec(b []byte) (schema.WorkflowSpec, error) {
 		Workflow workflowSpecIntermediate
 	}{}
 
-	if err := yaml.UnmarshalStrict(b, &s); err != nil {
+	d := yaml.NewDecoder(bytes.NewReader(b))
+	d.KnownFields(true)
+	if err := d.Decode(&s); err != nil {
 		return schema.WorkflowSpec{}, err
 	}
 
