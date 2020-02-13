@@ -4,11 +4,10 @@ package auth
 
 import (
 	"context"
-	"fmt"
 	"math/rand"
+	"net/url"
 
 	"github.com/sirupsen/logrus"
-	"github.com/sylabs/compute-cli/internal/pkg/browse"
 	"golang.org/x/oauth2"
 )
 
@@ -22,30 +21,23 @@ type BrowserOpener interface {
 }
 
 type interactiveSource struct {
-	ctx        context.Context
-	rs         rand.Source
-	bo         BrowserOpener
-	clientID   string
-	endpoint   oauth2.Endpoint
-	scopes     []string
-	browser    *browse.Browser
-	listenAddr string
-	testChan   chan result // used to inject results during testing only
+	ctx      context.Context
+	rs       rand.Source
+	bo       BrowserOpener
+	oc       *oauth2.Config
+	testChan chan result // used to inject results during testing only
 }
 
 // NewInteractiveTokenSource returns a token source that allows a user to interactively log in.
 //
 // This source uses the OAuth 2.0 Authorization Code with Proof Key Code Exchange flow.
-func NewInteractiveTokenSource(ctx context.Context, rs rand.Source, bo BrowserOpener, clientID string, endpoint oauth2.Endpoint, scope ...string) oauth2.TokenSource {
+func NewInteractiveTokenSource(ctx context.Context, rs rand.Source, bo BrowserOpener, oc *oauth2.Config) oauth2.TokenSource {
 	return &interactiveSource{
-		ctx:        ctx,
-		rs:         rs,
-		bo:         bo,
-		clientID:   clientID,
-		endpoint:   endpoint,
-		scopes:     scope,
-		listenAddr: "localhost:9876",
-		testChan:   make(chan result),
+		ctx:      ctx,
+		rs:       rs,
+		bo:       bo,
+		oc:       oc,
+		testChan: nil,
 	}
 }
 
@@ -66,19 +58,19 @@ func (s *interactiveSource) Token() (*oauth2.Token, error) {
 		return nil, err
 	}
 	sr := server{
-		conf: &oauth2.Config{
-			ClientID:    s.clientID,
-			Endpoint:    s.endpoint,
-			RedirectURL: fmt.Sprintf("http://%s%s", s.listenAddr, authPath),
-			Scopes:      s.scopes,
-		},
+		conf:   s.oc,
 		state:  state,
 		cv:     cv,
 		result: resultChan,
 	}
 
+	u, err := url.Parse(s.oc.RedirectURL)
+	if err != nil {
+		return nil, err
+	}
+
 	// Start listening for incoming connection before we open the URL to avoid a race condition.
-	hsr, err := sr.StartServer(s.listenAddr)
+	hsr, err := sr.StartServer(u.Host)
 	if err != nil {
 		return nil, err
 	}

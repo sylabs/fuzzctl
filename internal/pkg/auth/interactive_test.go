@@ -77,13 +77,17 @@ func TestInteractiveSourceToken(t *testing.T) {
 				wantValues: tt.wantValues,
 				err:        tt.browserErr,
 			}
-			endpoint := oauth2.Endpoint{
-				AuthURL: "http://test/authorization/callback",
+			oc := &oauth2.Config{
+				ClientID: goodClientID,
+				Endpoint: oauth2.Endpoint{
+					AuthURL: "http://test/authorization/callback",
+				},
+				RedirectURL: "http://localhost:/authorization/callback",
+				Scopes:      goodScopes,
 			}
 
-			s := NewInteractiveTokenSource(tt.ctx, rs, &bo, goodClientID, endpoint, goodScopes...)
+			s := NewInteractiveTokenSource(tt.ctx, rs, &bo, oc)
 			is := s.(*interactiveSource)
-			is.listenAddr = "localhost:"    // avoid port collisions during test
 			is.testChan = make(chan result) // side channel to inject result during test
 			defer close(is.testChan)
 
