@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -33,7 +34,14 @@ var CmpctlCmd = &cobra.Command{
 		}
 
 		// Read configuration.
-		f, err := os.Open(".fuzzconf.yaml")
+		cp, err := config.GetPath()
+		if err != nil {
+			return err
+		}
+		if err := os.MkdirAll(path.Dir(cp), 0700); err != nil {
+			return err
+		}
+		f, err := os.Open(cp)
 		if err == nil {
 			// Pre-existing config.
 			defer f.Close()
@@ -83,7 +91,11 @@ var CmpctlCmd = &cobra.Command{
 		}
 
 		// Save config.
-		f, err := os.OpenFile(".fuzzconf.yaml", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+		cp, err := config.GetPath()
+		if err != nil {
+			return err
+		}
+		f, err := os.OpenFile(cp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 		if err != nil {
 			return err
 		}
