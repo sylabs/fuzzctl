@@ -16,6 +16,7 @@ type Job struct {
 	Command  []string
 	Status   string
 	ExitCode *int32
+	Output   string
 	Requires []Job
 }
 

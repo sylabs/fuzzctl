@@ -37,5 +37,17 @@ var infoCmd = &cobra.Command{
 			fmt.Fprintf(tw, infoLineFmt, j.Name, j.ID, j.Status, exitCode)
 		}
 		tw.Flush()
+
+		printHeader := true
+		for _, j := range wf.Jobs {
+			if j.Output != "" {
+				if printHeader {
+					printHeader = false
+					fmt.Printf("\nJOB OUTPUT:\n")
+				}
+				fmt.Printf("=== %v ===:\n", j.Name)
+				fmt.Printf("%v", j.Output)
+			}
+		}
 	},
 }
