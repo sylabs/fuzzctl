@@ -30,6 +30,7 @@ func convertJob(sj schema.Job) (j Job) {
 	j.Command = sj.Command
 	j.Status = sj.Status
 	j.ExitCode = sj.ExitCode
+	j.Output = sj.Output
 
 	return j
 }
