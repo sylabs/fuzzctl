@@ -104,16 +104,3 @@ func (c *Client) List(ctx context.Context) ([]Workflow, error) {
 
 	return wfs, nil
 }
-
-func (c *Client) ServerInfo(ctx context.Context) (ServerInfo, error) {
-	q := struct {
-		ServerInfo `graphql:"systemInfo"`
-	}{}
-
-	err := c.Query(ctx, &q, nil)
-	if err != nil {
-		return ServerInfo{}, fmt.Errorf("while getting server information: %w", err)
-	}
-
-	return q.ServerInfo, nil
-}

@@ -125,7 +125,6 @@ func init() {
 	FuzzctlCmd.AddCommand(deleteCmd)
 	FuzzctlCmd.AddCommand(infoCmd)
 	FuzzctlCmd.AddCommand(listCmd)
-	FuzzctlCmd.AddCommand(serverInfoCmd)
 	FuzzctlCmd.AddCommand(loginCmd)
 	FuzzctlCmd.AddCommand(logoutCmd)
 }
