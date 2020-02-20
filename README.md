@@ -1,6 +1,6 @@
-# Compute CLI
+# Fuzzctl
 
-CLI to manage workflows with the Sylabs Compute Service.
+CLI to manage workflows with Fuzzball.
 
 ## Quick Start
 
@@ -39,23 +39,23 @@ go build -o <path> ./...
 Finally, run a command:
 
 ```sh
-$ cmpctl
-cmpctl enables control of workflows for the compute service.
+$ Fuzzctl
+fuzzctl enables control of workflows for Fuzzball.
 
 Usage:
-  cmpctl [command]
+  fuzzctl [command]
 
 Available Commands:
-  create      create enables you to submit a workflow to the compute service queue.
-  delete      delete allows you to remove a workflow from the compute service queue.
+  create      create enables you to submit a workflow to the Fuzzball queue.
+  delete      delete allows you to remove a workflow from the Fuzzball queue.
   help        Help about any command
-  info        info allows you to see a workflow's state within the compute service.
-  list        list allows you to list workflows within the compute service.
+  info        info allows you to see a workflow's state within Fuzzball.
+  list        list allows you to list workflows within Fuzzball.
 
 Flags:
   -d, --debug              Enable debug output
-  -h, --help               help for cmpctl
+  -h, --help               help for fuzzctl
       --http_addr string   Address to reach compute server (default "http://localhost:8080")
 
-Use "cmpctl [command] --help" for more information about a command.
+Use "fuzzctl [command] --help" for more information about a command.
 ```

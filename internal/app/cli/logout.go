@@ -8,7 +8,7 @@ import (
 
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
-	Short: "logout logs you out of the compute service.",
+	Short: "logout logs you out of Fuzzball.",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		tokenSrc = nil

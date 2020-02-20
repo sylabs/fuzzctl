@@ -16,7 +16,7 @@ import (
 
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "login allows you to authenticate with the compute service.",
+	Short: "login allows you to authenticate with Fuzzball.",
 	Args:  cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ar, err := cfg.GetActiveRemote()
