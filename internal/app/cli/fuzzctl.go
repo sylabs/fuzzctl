@@ -1,3 +1,5 @@
+// Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -16,17 +18,20 @@ import (
 var (
 	c *compute.Client
 
-	debug bool
-
-	httpAddr string
-
 	tokenSrc oauth2.TokenSource
 	cfg      *config.Config
 )
 
-var CmpctlCmd = &cobra.Command{
-	Use:   "cmpctl",
-	Short: "cmpctl enables control of workflows for the compute service.",
+// fuzzctl flag variables
+var (
+	debug bool
+
+	httpAddr string
+)
+
+var FuzzctlCmd = &cobra.Command{
+	Use:   "fuzzctl",
+	Short: "fuzzctl enables control of workflows for Fuzzball.",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// change log level if debugging
 		if debug {
@@ -47,14 +52,14 @@ var CmpctlCmd = &cobra.Command{
 			defer f.Close()
 			c, err := config.Read(f)
 			if err != nil {
-				return fmt.Errorf("Failed to read config file: %w", err)
+				return fmt.Errorf("failed to read config file: %w", err)
 			}
 			cfg = c
 		} else {
 			// Write default config.
 			c, err := config.Default()
 			if err != nil {
-				return fmt.Errorf("Failed to create default config: %w", err)
+				return fmt.Errorf("failed to create default config: %w", err)
 			}
 			cfg = c
 		}
@@ -64,7 +69,7 @@ var CmpctlCmd = &cobra.Command{
 		// Configure OAuth2 Token Source
 		r, err := cfg.GetActiveRemote()
 		if err != nil {
-			return fmt.Errorf("Failed to get active remote: %w", err)
+			return fmt.Errorf("failed to get active remote: %w", err)
 		}
 
 		switch t := r.GetAuthType(); t {
@@ -73,7 +78,7 @@ var CmpctlCmd = &cobra.Command{
 		case config.AuthConfigTypeClientCredentials:
 			tokenSrc = r.GetClientCredentialsConfig().TokenSource(ctx)
 		default:
-			return fmt.Errorf("Unknown auth configuration type: %v", t)
+			return fmt.Errorf("unknown auth configuration type: %v", t)
 		}
 
 		// initialize global client for subcommands to leverage
@@ -113,14 +118,14 @@ var CmpctlCmd = &cobra.Command{
 }
 
 func init() {
-	CmpctlCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Enable debug output")
-	CmpctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach compute server")
+	FuzzctlCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Enable debug output")
+	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach compute server")
 
-	CmpctlCmd.AddCommand(createCmd)
-	CmpctlCmd.AddCommand(deleteCmd)
-	CmpctlCmd.AddCommand(infoCmd)
-	CmpctlCmd.AddCommand(listCmd)
-	CmpctlCmd.AddCommand(serverInfoCmd)
-	CmpctlCmd.AddCommand(loginCmd)
-	CmpctlCmd.AddCommand(logoutCmd)
+	FuzzctlCmd.AddCommand(createCmd)
+	FuzzctlCmd.AddCommand(deleteCmd)
+	FuzzctlCmd.AddCommand(infoCmd)
+	FuzzctlCmd.AddCommand(listCmd)
+	FuzzctlCmd.AddCommand(serverInfoCmd)
+	FuzzctlCmd.AddCommand(loginCmd)
+	FuzzctlCmd.AddCommand(logoutCmd)
 }

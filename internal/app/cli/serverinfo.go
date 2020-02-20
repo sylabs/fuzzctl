@@ -1,4 +1,5 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -10,7 +11,7 @@ import (
 
 var serverInfoCmd = &cobra.Command{
 	Use:   "serverinfo",
-	Short: "serverinfo enables you to view the properties of a compute service.",
+	Short: "serverinfo enables you to view the properties the Fuzzball service.",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 

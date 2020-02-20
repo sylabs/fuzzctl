@@ -1,4 +1,5 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -24,7 +25,7 @@ func init() {
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list allows you to list workflows within the compute service.",
+	Short: "list allows you to list workflows within Fuzzball.",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		wfs, err := c.List(context.Background())

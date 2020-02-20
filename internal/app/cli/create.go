@@ -1,4 +1,5 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -12,7 +13,7 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:   "create <WORKLOW_CONFIG_PATH>",
-	Short: "create enables you to submit a workflow to the compute service queue.",
+	Short: "create enables you to submit a workflow to the Fuzzball queue.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		path := args[0]

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	if err := cli.CmpctlCmd.Execute(); err != nil {
+	if err := cli.FuzzctlCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }

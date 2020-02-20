@@ -1,4 +1,5 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -13,9 +14,17 @@ import (
 
 const infoLineFmt = "%s\t%s\t%s\t%s\n"
 
+var (
+	output bool
+)
+
+func init() {
+	infoCmd.Flags().BoolVarP(&output, "output", "o", false, "Enable job output information")
+}
+
 var infoCmd = &cobra.Command{
 	Use:   "info <ID>",
-	Short: "info allows you to see a workflow's state within the compute service.",
+	Short: "info allows you to see a workflow's state within Fuzzball.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		id := args[0]
@@ -38,15 +47,17 @@ var infoCmd = &cobra.Command{
 		}
 		tw.Flush()
 
-		printHeader := true
-		for _, j := range wf.Jobs {
-			if j.Output != "" {
-				if printHeader {
-					printHeader = false
-					fmt.Printf("\nJOB OUTPUT:\n")
+		if output {
+			printHeader := true
+			for _, j := range wf.Jobs {
+				if j.Output != "" {
+					if printHeader {
+						printHeader = false
+						fmt.Printf("\nJOB OUTPUT:\n")
+					}
+					fmt.Printf("=== %v ===\n", j.Name)
+					fmt.Printf("%v", j.Output)
 				}
-				fmt.Printf("=== %v ===:\n", j.Name)
-				fmt.Printf("%v", j.Output)
 			}
 		}
 	},

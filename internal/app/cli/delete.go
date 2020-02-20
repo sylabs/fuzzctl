@@ -1,4 +1,5 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
+
 package cli
 
 import (
@@ -10,7 +11,7 @@ import (
 
 var deleteCmd = &cobra.Command{
 	Use:   "delete <ID>",
-	Short: "delete allows you to remove a workflow from the compute service queue.",
+	Short: "delete allows you to remove a workflow from the Fuzzball queue.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		id := args[0]
