@@ -4,11 +4,13 @@ package cli
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/sylabs/compute-cli/internal/pkg/compute"
+	"github.com/sylabs/compute-cli/internal/pkg/parse"
+	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"gopkg.in/yaml.v3"
 )
 
 var createCmd = &cobra.Command{
@@ -18,12 +20,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		path := args[0]
 
-		data, err := ioutil.ReadFile(path)
-		if err != nil {
-			logrus.Fatal(err)
-		}
-
-		spec, err := compute.ParseSpec(data)
+		spec, err := parseWorkflowSpec(path)
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -36,4 +33,24 @@ var createCmd = &cobra.Command{
 
 		logrus.Infof("Created workflow: %s\n", wf)
 	},
+}
+
+func parseWorkflowSpec(path string) (schema.WorkflowSpec, error) {
+	specFile, err := os.Open(path)
+	if err != nil {
+		return schema.WorkflowSpec{}, err
+	}
+	defer specFile.Close()
+
+	// Since YAML is a superset of JSON, we can actually accept both
+	// with this decoder.
+	d := yaml.NewDecoder(specFile)
+	d.KnownFields(true)
+
+	p := parse.New(d)
+	spec, err := p.ParseWorkflowSpec()
+	if err != nil {
+		return schema.WorkflowSpec{}, err
+	}
+	return spec, nil
 }
