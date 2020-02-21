@@ -1,20 +1,30 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
 
-package compute
+package parse
 
 import (
-	"bytes"
 	"fmt"
 	"sort"
 
 	"github.com/sylabs/compute-cli/internal/pkg/schema"
-	"gopkg.in/yaml.v3"
 )
 
 const specVersion = "0.1"
 
+type Decoder interface {
+	Decode(v interface{}) error
+}
+
+type Parser struct {
+	d Decoder
+}
+
+func New(d Decoder) Parser {
+	return Parser{d}
+}
+
 // NOTE(ian): This intermediate struct is needed due to the current
-// yaml specification accepting an map of structs while the
+// specification accepting an map of structs while the
 // graphQL api expects a list
 type workflowSpecIntermediate struct {
 	Name    string
@@ -30,20 +40,18 @@ type jobSpecIntermediate struct {
 	Volumes  map[string]*schema.VolumeRequirement
 }
 
-// ParseSpec converts a yaml specification for a workflow
+// ParseWorkflowSpec converts a specification for a workflow
 // into a structure that can be fed to a GraphQL client
 // as an input object. Due to the differing formats of the
-// yaml specification and required GraphQL client structure
-// an intermediate is required.
-func ParseSpec(b []byte) (schema.WorkflowSpec, error) {
+// specification and required GraphQL client structure
+// an intermediate is required for conversion.
+func (p Parser) ParseWorkflowSpec() (schema.WorkflowSpec, error) {
 	s := struct {
 		Version  string
 		Workflow workflowSpecIntermediate
 	}{}
 
-	d := yaml.NewDecoder(bytes.NewReader(b))
-	d.KnownFields(true)
-	if err := d.Decode(&s); err != nil {
+	if err := p.d.Decode(&s); err != nil {
 		return schema.WorkflowSpec{}, err
 	}
 

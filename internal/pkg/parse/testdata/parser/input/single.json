@@ -1,0 +1,14 @@
+{
+    "version": "0.1",
+    "workflow": {
+      "name": "SingleJob",
+      "jobs": {
+        "date": {
+          "image": "library://alpine:latest",
+          "command": [
+            "date"
+          ]
+        }
+      }
+    }
+  }
