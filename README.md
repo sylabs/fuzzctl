@@ -4,21 +4,24 @@ CLI to manage workflows with Fuzzball.
 
 ## Quick Start
 
-Configure your go environment to pull private go modules, by forcing `go get` to use `git+ssh` instead of `https`. This lets the go compiler pull private dependencies using your machine's ssh keys.
+Ensure that you have one of the two most recent minor versions of Go installed as per the [installation instructions](https://golang.org/doc/install).
+
+Configure your Go environment to pull private Go modules, by forcing `go get` to use `git+ssh` instead of `https`. This lets the Go compiler pull private dependencies using your machine's ssh keys.
 
 ```sh
 git config --global url."ssh://git@github.com/sylabs".insteadOf "https://github.com/sylabs"
 ```
 
-If using Go 1.13, the `go` command defaults to downloading modules from the public Go module mirror, and validating downloaded modules against the public Go checksum database. Since private Sylabs projects are not availble in the public mirror nor the public checksum database, we must tell Go about this. One way to do this is to set `GOPRIVATE` in the Go environment:
+Starting with v1.13, the `go` command defaults to downloading modules from the public Go module mirror, and validating downloaded modules against the public Go checksum database. Since private Sylabs projects are not availble in the public mirror nor the public checksum database, we must tell Go about this. One way to do this is to set `GOPRIVATE` in the Go environment:
 
 ```sh
 go env -w GOPRIVATE=github.com/sylabs
 ```
 
-In order for go to execute this binary the path `${GOPATH}/bin` needs to be included in your `PATH`.
+In order for Go to execute this binary the path in `go env GOPATH` needs to be included in your `PATH`.
 
 To run the CLI, you'll need to either `go get` the tool from github:
+
 ```sh
 go get -u github.com/sylabs/compute-cli
 ```
@@ -35,11 +38,10 @@ or build the binary to a temporary location with:
 go build -o <path> ./...
 ```
 
-
 Finally, run a command:
 
 ```sh
-$ Fuzzctl
+$ fuzzctl
 fuzzctl enables control of workflows for Fuzzball.
 
 Usage:
