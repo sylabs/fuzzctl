@@ -1,5 +1,7 @@
 # Fuzzctl
 
+[![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=sylabs/compute-cli&identifier=233642046)](https://app.dependabot.com/accounts/sylabs/repos/233642046)
+
 CLI to manage workflows with Fuzzball.
 
 ## Quick Start
