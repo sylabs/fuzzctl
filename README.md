@@ -1,5 +1,6 @@
 # Fuzzctl
 
+[![CI Workflow](https://github.com/sylabs/compute-cli/workflows/ci/badge.svg)](https://github.com/sylabs/compute-cli/actions)
 [![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=sylabs/compute-cli&identifier=233642046)](https://app.dependabot.com/accounts/sylabs/repos/233642046)
 
 CLI to manage workflows with Fuzzball.
