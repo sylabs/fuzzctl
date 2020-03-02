@@ -2,14 +2,16 @@
   "version": "0.1",
   "workflow": {
     "name": "MultipleJobs",
-    "jobs": {
-      "date": {
+    "jobs": [
+      {
+        "name": "date",
         "image": "library://alpine:latest",
         "command": [
           "date"
         ]
       },
-      "hello": {
+      {
+        "name": "hello",
         "image": "library://alpine:latest",
         "command": [
           "echo",
@@ -17,6 +19,6 @@
           "Hello, world!"
         ]
       }
-    }
+    ]
   }
 }

@@ -2,7 +2,7 @@ version: 0.1
 workflow:
   name: SingleJob
   jobs:
-    date: 
+    - name: date
       image: library://alpine:latest
       command: ["date"]
       random: "field name"

@@ -2,10 +2,10 @@ version: 0.1
 workflow:
   name: DependentJobs
   jobs:
-    date:
+    - name: date
       image: library://alpine:latest
       command: ["date", ">", "/data/time"]
-    hello:
+    - name: hello
       image: library://alpine:latest
       command: ["echo", "-n", "Hello, world, the time is $(cat /share/time)"]
       requires: ["date"]
