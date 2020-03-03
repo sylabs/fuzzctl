@@ -1,7 +1,7 @@
 # Fuzzctl
 
-[![CI Workflow](https://github.com/sylabs/compute-cli/workflows/ci/badge.svg)](https://github.com/sylabs/compute-cli/actions)
-[![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=sylabs/compute-cli&identifier=233642046)](https://app.dependabot.com/accounts/sylabs/repos/233642046)
+[![CI Workflow](https://github.com/sylabs/fuzzctl/workflows/ci/badge.svg)](https://github.com/sylabs/fuzzctl/actions)
+[![Dependabot](https://api.dependabot.com/badges/status?host=github&repo=sylabs/fuzzctl&identifier=233642046)](https://app.dependabot.com/accounts/sylabs/repos/233642046)
 
 CLI to manage workflows with Fuzzball.
 
@@ -26,7 +26,7 @@ In order for Go to execute this binary the path in `go env GOPATH` needs to be i
 To run the CLI, you'll need to either `go get` the tool from github:
 
 ```sh
-go get -u github.com/sylabs/compute-cli
+go get -u github.com/sylabs/fuzzctl
 ```
 
 Developers can either install to `${GOPATH}/bin` with:
@@ -60,7 +60,7 @@ Available Commands:
 Flags:
   -d, --debug              Enable debug output
   -h, --help               help for fuzzctl
-      --http_addr string   Address to reach compute server (default "http://localhost:8080")
+      --http_addr string   Address to reach Fuzzball server (default "http://localhost:8080")
 
 Use "fuzzctl [command] --help" for more information about a command.
 ```

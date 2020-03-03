@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/sylabs/compute-cli/internal/pkg/auth"
-	"github.com/sylabs/compute-cli/internal/pkg/browse"
-	"github.com/sylabs/compute-cli/internal/pkg/config"
+	"github.com/sylabs/fuzzctl/internal/pkg/auth"
+	"github.com/sylabs/fuzzctl/internal/pkg/browse"
+	"github.com/sylabs/fuzzctl/internal/pkg/config"
 	"golang.org/x/oauth2"
 )
 
