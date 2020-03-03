@@ -5,7 +5,7 @@ package parse
 import (
 	"fmt"
 
-	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"github.com/sylabs/fuzzctl/internal/pkg/schema"
 )
 
 const specVersion = "0.1"

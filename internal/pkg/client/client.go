@@ -1,6 +1,6 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
 
-package compute
+package client
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 
 	"github.com/shurcooL/graphql"
 	"github.com/sirupsen/logrus"
-	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"github.com/sylabs/fuzzctl/internal/pkg/schema"
 	"golang.org/x/oauth2"
 )
 
 const (
-	userAgent = "compute-cli/0.1"
+	userAgent = "fuzzctl/0.1"
 )
 
 type Client struct {

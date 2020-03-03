@@ -8,8 +8,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/sylabs/compute-cli/internal/pkg/parse"
-	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"github.com/sylabs/fuzzctl/internal/pkg/parse"
+	"github.com/sylabs/fuzzctl/internal/pkg/schema"
 	"gopkg.in/yaml.v3"
 )
 

@@ -10,13 +10,13 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/sylabs/compute-cli/internal/pkg/compute"
-	"github.com/sylabs/compute-cli/internal/pkg/config"
+	"github.com/sylabs/fuzzctl/internal/pkg/client"
+	"github.com/sylabs/fuzzctl/internal/pkg/config"
 	"golang.org/x/oauth2"
 )
 
 var (
-	c *compute.Client
+	c *client.Client
 
 	tokenSrc oauth2.TokenSource
 	cfg      *config.Config
@@ -82,7 +82,7 @@ var FuzzctlCmd = &cobra.Command{
 		}
 
 		// initialize global client for subcommands to leverage
-		c = compute.NewClient(ctx, tokenSrc, httpAddr)
+		c = client.NewClient(ctx, tokenSrc, httpAddr)
 
 		return nil
 	},
@@ -119,7 +119,7 @@ var FuzzctlCmd = &cobra.Command{
 
 func init() {
 	FuzzctlCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Enable debug output")
-	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach compute server")
+	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach Fuzzball server")
 
 	FuzzctlCmd.AddCommand(createCmd)
 	FuzzctlCmd.AddCommand(deleteCmd)

@@ -1,4 +1,4 @@
-module github.com/sylabs/compute-cli
+module github.com/sylabs/fuzzctl
 
 go 1.13
 

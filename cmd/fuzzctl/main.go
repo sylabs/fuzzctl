@@ -5,7 +5,7 @@ package main
 import (
 	"os"
 
-	"github.com/sylabs/compute-cli/internal/app/cli"
+	"github.com/sylabs/fuzzctl/internal/app/cli"
 )
 
 func main() {

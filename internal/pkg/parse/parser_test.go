@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/sirupsen/logrus"
-	"github.com/sylabs/compute-cli/internal/pkg/schema"
+	"github.com/sylabs/fuzzctl/internal/pkg/schema"
 	"gopkg.in/yaml.v3"
 )
 

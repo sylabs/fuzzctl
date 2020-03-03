@@ -1,8 +1,8 @@
 // Copyright (c) 2020, Sylabs, Inc. All rights reserved.
 
-package compute
+package client
 
-import "github.com/sylabs/compute-cli/internal/pkg/schema"
+import "github.com/sylabs/fuzzctl/internal/pkg/schema"
 
 // convertWorkflow returns a populated workflow structure given a
 // GraphQL formated workflow structure
