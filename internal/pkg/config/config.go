@@ -9,6 +9,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const (
+	// DefaultBaseURI is the default URI for the fuzzball-service
+	DefaultBaseURI = "http://localhost:8080"
+)
+
 var (
 	// ErrRemoteNotFound is returned with the specified remote is not found.
 	ErrRemoteNotFound = errors.New("remote not found")
@@ -29,7 +34,7 @@ func Default() (*Config, error) {
 		raw: rawConfig{
 			Remotes: map[string]*remote{
 				"default": {
-					BaseURI: "http://localhost:8080",
+					BaseURI: DefaultBaseURI,
 					AuthConfig: authConfig{
 						Type:             AuthConfigTypeAuthCodePKCE,
 						ClientID:         "0oa24wwhwBWYa1T804x6",

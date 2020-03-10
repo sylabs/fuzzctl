@@ -81,45 +81,70 @@ var FuzzctlCmd = &cobra.Command{
 			return fmt.Errorf("unknown auth configuration type: %v", t)
 		}
 
+		// allow command-line override of base URI, otherwise use default
+		var baseURI string
+		if httpAddr != "" {
+			baseURI = httpAddr
+		} else {
+			baseURI = r.GetBaseURI()
+		}
+
 		// initialize global client for subcommands to leverage
-		c = client.NewClient(ctx, tokenSrc, httpAddr)
+		c = client.NewClient(ctx, tokenSrc, baseURI)
 
 		return nil
 	},
 	PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
-		ar, err := cfg.GetActiveRemote()
-		if err != nil {
-			return err
+		if cmd.Use == "login" {
+			return writeConfig()
 		}
-
-		if tokenSrc != nil {
-			// Get updated token.
-			t, err := tokenSrc.Token()
-			if err != nil {
-				return err
-			}
-			ar.SetToken(t)
-		} else {
-			ar.SetToken(nil)
-		}
-
-		// Save config.
-		cp, err := config.GetPath()
-		if err != nil {
-			return err
-		}
-		f, err := os.OpenFile(cp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-		return cfg.Write(f)
+		return nil
 	},
+}
+
+// writeConfig writes the (updated) configuration to disk. It is called only
+// for the 'login' action.
+func writeConfig() error {
+	ar, err := cfg.GetActiveRemote()
+	if err != nil {
+		return err
+	}
+
+	if tokenSrc != nil {
+		// Get updated token.
+		t, err := tokenSrc.Token()
+		if err != nil {
+			return err
+		}
+		ar.SetToken(t)
+	} else {
+		ar.SetToken(nil)
+	}
+
+	var baseURI string
+	if httpAddr != "" {
+		baseURI = httpAddr
+	} else {
+		baseURI = config.DefaultBaseURI
+	}
+	ar.SetBaseURI(baseURI)
+
+	// Save config.
+	cp, err := config.GetPath()
+	if err != nil {
+		return err
+	}
+	f, err := os.OpenFile(cp, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return cfg.Write(f)
 }
 
 func init() {
 	FuzzctlCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Enable debug output")
-	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach Fuzzball server")
+	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "", "Address to reach Fuzzball server")
 
 	FuzzctlCmd.AddCommand(createCmd)
 	FuzzctlCmd.AddCommand(deleteCmd)
