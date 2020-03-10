@@ -115,7 +115,7 @@ var FuzzctlCmd = &cobra.Command{
 		if httpAddr != "" {
 			baseURI = httpAddr
 		} else {
-			baseURI = "http://localhost:8080"
+			baseURI = config.DefaultBaseURI
 		}
 		ar.SetBaseURI(baseURI)
 
