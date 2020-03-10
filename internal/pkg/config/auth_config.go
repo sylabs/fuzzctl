@@ -4,6 +4,7 @@ package config
 
 import (
 	"fmt"
+	"net/url"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -75,4 +76,15 @@ func (r *remote) GetClientCredentialsConfig() *clientcredentials.Config {
 
 func (r *remote) GetBaseURI() string {
 	return r.BaseURI
+}
+
+func (r *remote) SetBaseURI(baseURI string) error {
+	// validate baseURI
+	if _, err := url.Parse(baseURI); err != nil {
+		return err
+	}
+
+	r.BaseURI = baseURI
+
+	return nil
 }

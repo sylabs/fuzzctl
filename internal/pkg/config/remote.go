@@ -19,6 +19,7 @@ type Remote interface {
 	SetToken(t *oauth2.Token) error
 
 	GetBaseURI() string
+	SetBaseURI(baseURI string) error
 }
 
 // remote describes an endpoint.

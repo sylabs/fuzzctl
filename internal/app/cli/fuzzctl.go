@@ -111,6 +111,14 @@ var FuzzctlCmd = &cobra.Command{
 			ar.SetToken(nil)
 		}
 
+		var baseURI string
+		if httpAddr != "" {
+			baseURI = httpAddr
+		} else {
+			baseURI = "http://localhost:8080"
+		}
+		ar.SetBaseURI(baseURI)
+
 		// Save config.
 		cp, err := config.GetPath()
 		if err != nil {
