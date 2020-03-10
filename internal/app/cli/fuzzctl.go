@@ -81,8 +81,16 @@ var FuzzctlCmd = &cobra.Command{
 			return fmt.Errorf("unknown auth configuration type: %v", t)
 		}
 
+		// allow command-line override of base URI, otherwise use default
+		var baseURI string
+		if httpAddr != "" {
+			baseURI = httpAddr
+		} else {
+			baseURI = r.GetBaseURI()
+		}
+
 		// initialize global client for subcommands to leverage
-		c = client.NewClient(ctx, tokenSrc, httpAddr)
+		c = client.NewClient(ctx, tokenSrc, baseURI)
 
 		return nil
 	},
@@ -119,7 +127,7 @@ var FuzzctlCmd = &cobra.Command{
 
 func init() {
 	FuzzctlCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "Enable debug output")
-	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "http://localhost:8080", "Address to reach Fuzzball server")
+	FuzzctlCmd.PersistentFlags().StringVar(&httpAddr, "http_addr", "", "Address to reach Fuzzball server")
 
 	FuzzctlCmd.AddCommand(createCmd)
 	FuzzctlCmd.AddCommand(deleteCmd)
