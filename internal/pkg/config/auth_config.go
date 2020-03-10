@@ -72,3 +72,7 @@ func (r *remote) GetClientCredentialsConfig() *clientcredentials.Config {
 		TokenURL:     r.AuthConfig.TokenURL,
 	}
 }
+
+func (r *remote) GetBaseURI() string {
+	return r.BaseURI
+}
