@@ -1,0 +1,22 @@
+version: 0.1
+workflow:
+  name: HelloWorld 
+  jobs:
+    - name: date
+      image: "library://ian-sylabs/default/date:latest"
+      command: ["datescript"]
+      volumes:
+        - name: v1
+          location: "/data"             
+    - name: hello
+      image: "library://ian-sylabs/default/hello:latest" 
+      command: ["helloscript"]
+      requires: ["date"]
+      volumes:
+        - name: v1
+          location: "/share"
+
+  volumes:
+    - name: v1
+      type: EPHEMERAL 
+
