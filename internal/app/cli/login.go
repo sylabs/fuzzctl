@@ -24,7 +24,7 @@ var loginCmd = &cobra.Command{
 			return err
 		}
 		c := ar.GetAuthCodePKCEConfig()
-		c.Scopes = []string{"offline_access"} // TODO: request additional scopes
+		c.Scopes = []string{"openid", "offline_access"} // TODO: request additional scopes
 
 		// Do interactive login.
 		ts := auth.NewInteractiveTokenSource(context.TODO(), rand.NewSource(time.Now().UnixNano()), &browse.Browser{}, c)
