@@ -3,6 +3,7 @@ module github.com/sylabs/fuzzctl
 go 1.13
 
 require (
+	github.com/magefile/mage v1.9.0
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.6
