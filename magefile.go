@@ -23,3 +23,15 @@ func Install() error {
 func Test() error {
 	return sh.RunV(mg.GoCmd(), "test", "-cover", "-race", "./...")
 }
+
+// Deb builds a deb package.
+func Deb() error {
+	mg.Deps(Build)
+	return makePackage("deb")
+}
+
+// RPM builds a RPM package.
+func RPM() error {
+	mg.Deps(Build)
+	return makePackage("rpm")
+}

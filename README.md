@@ -23,3 +23,26 @@ Ensure `$(go env GOPATH)/bin` is included in your `$PATH`, at which point you ca
 ```sh
 fuzzctl help
 ```
+
+## Testing
+
+Unit tests can be run like so:
+
+```sh
+mage test
+```
+
+## Installation and Packaging
+
+To install `fuzzctl` in `$GOBIN`:
+
+```sh
+mage install
+```
+
+To build a `.deb` and/or `.rpm`:
+
+```sh
+mage deb
+mage rpm
+```
