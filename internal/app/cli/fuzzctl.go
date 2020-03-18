@@ -121,13 +121,17 @@ func writeConfig() error {
 		ar.SetToken(nil)
 	}
 
-	var baseURI string
 	if httpAddr != "" {
-		baseURI = httpAddr
-	} else {
-		baseURI = config.DefaultBaseURI
+		// command-line argument overrides all, even the config file
+		if err := ar.SetBaseURI(httpAddr); err != nil {
+			return err
+		}
+	} else if ar.GetBaseURI() == "" {
+		// no existing configuration, use default
+		if err := ar.SetBaseURI(config.DefaultBaseURI); err != nil {
+			return err
+		}
 	}
-	ar.SetBaseURI(baseURI)
 
 	// Save config.
 	cp, err := config.GetPath()

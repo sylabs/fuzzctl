@@ -15,6 +15,9 @@ const (
 )
 
 var (
+	// ar contains the current remote profile
+	ar Remote
+
 	// ErrRemoteNotFound is returned with the specified remote is not found.
 	ErrRemoteNotFound = errors.New("remote not found")
 )
@@ -34,7 +37,6 @@ func Default() (*Config, error) {
 		raw: rawConfig{
 			Remotes: map[string]*remote{
 				"default": {
-					BaseURI: DefaultBaseURI,
 					AuthConfig: authConfig{
 						Type:             AuthConfigTypeAuthCodePKCE,
 						ClientID:         "0oa24wwhwBWYa1T804x6",
@@ -64,10 +66,14 @@ func (c *Config) Write(w io.Writer) error {
 
 // GetActiveRemote returns the active remote.
 func (c *Config) GetActiveRemote() (Remote, error) {
+	if ar != nil {
+		return ar, nil
+	}
 	// TODO: read the active config from the config
 	r, ok := c.raw.Remotes["default"]
 	if !ok {
 		return nil, ErrRemoteNotFound
 	}
+	ar = r
 	return r, nil
 }
