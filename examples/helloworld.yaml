@@ -3,13 +3,15 @@ workflow:
   name: HelloWorld 
   jobs:
     - name: date
-      image: "library://ian-sylabs/default/date:latest"
+      # Example library URI using an explicit hostname
+      image: "library://library.sylabs.io/ian-sylabs/default/date:latest"
       command: ["datescript"]
       volumes:
         - name: v1
           location: "/data"             
     - name: hello
-      image: "library://ian-sylabs/default/hello:latest" 
+      # Example library URI relying on the default hostname
+      image: "library:/ian-sylabs/default/hello:latest" 
       command: ["helloscript"]
       requires: ["date"]
       volumes:
