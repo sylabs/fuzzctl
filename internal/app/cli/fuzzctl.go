@@ -3,10 +3,11 @@
 package cli
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"path"
+	"runtime"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -34,6 +35,16 @@ var (
 
 	httpAddr string
 )
+
+// getUserAgent returns a user agent string.
+func getUserAgent() string {
+	return fmt.Sprintf("fuzzctl/%v (%v %v) Go/%v",
+		gitVersion,
+		strings.Title(runtime.GOOS),
+		runtime.GOARCH,
+		strings.TrimPrefix(runtime.Version(), "go"),
+	)
+}
 
 var FuzzctlCmd = &cobra.Command{
 	Use:   "fuzzctl",
@@ -70,19 +81,18 @@ var FuzzctlCmd = &cobra.Command{
 			cfg = c
 		}
 
-		ctx := context.TODO()
-
-		// Configure OAuth2 Token Source
+		// Get active remote from configuration.
 		r, err := cfg.GetActiveRemote()
 		if err != nil {
 			return fmt.Errorf("failed to get active remote: %w", err)
 		}
 
+		// Configure OAuth2 Token Source.
 		switch t := r.GetAuthType(); t {
 		case config.AuthConfigTypeAuthCodePKCE:
-			tokenSrc = r.GetAuthCodePKCEConfig().TokenSource(ctx, r.GetToken())
+			tokenSrc = r.GetAuthCodePKCEConfig().TokenSource(cmd.Context(), r.GetToken())
 		case config.AuthConfigTypeClientCredentials:
-			tokenSrc = r.GetClientCredentialsConfig().TokenSource(ctx)
+			tokenSrc = r.GetClientCredentialsConfig().TokenSource(cmd.Context())
 		default:
 			return fmt.Errorf("unknown auth configuration type: %v", t)
 		}
@@ -95,10 +105,12 @@ var FuzzctlCmd = &cobra.Command{
 			baseURI = r.GetBaseURI()
 		}
 
-		// initialize global client for subcommands to leverage
-		c = client.NewClient(ctx, tokenSrc, baseURI)
+		// Initialize GraphQL client for subcommands to leverage.
+		c, err = client.NewClient(baseURI+"/graphql",
+			client.OptHTTPClient(oauth2.NewClient(cmd.Context(), tokenSrc)),
+			client.OptUserAgent(getUserAgent()))
 
-		return nil
+		return err
 	},
 	PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
 		if cmd.Use == "login" {

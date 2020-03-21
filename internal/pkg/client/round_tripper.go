@@ -5,6 +5,9 @@ package client
 import "net/http"
 
 func setUserAgent(rt http.RoundTripper, agent string) http.RoundTripper {
+	if rt == nil {
+		rt = http.DefaultTransport
+	}
 	return &uaRT{
 		rt:    rt,
 		agent: agent,

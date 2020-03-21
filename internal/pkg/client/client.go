@@ -5,27 +5,59 @@ package client
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/shurcooL/graphql"
-	"github.com/sirupsen/logrus"
 	"github.com/sylabs/fuzzctl/internal/pkg/schema"
-	"golang.org/x/oauth2"
 )
 
-const (
-	userAgent = "fuzzctl/0.1"
-)
-
+// Client is a Fuzzball GraphQL client.
 type Client struct {
 	*graphql.Client
+
+	httpClient *http.Client
+	userAgent  string
 }
 
-func NewClient(ctx context.Context, ts oauth2.TokenSource, serverURL string) *Client {
-	endpoint := fmt.Sprintf("%s/graphql", serverURL)
-	logrus.Debugf("Creating graphql client for: %s", endpoint)
-	c := oauth2.NewClient(ctx, ts)
-	c.Transport = setUserAgent(c.Transport, userAgent)
-	return &Client{graphql.NewClient(endpoint, c)}
+// OptHTTPClient overrides the default HTTP client.
+func OptHTTPClient(hc *http.Client) func(c *Client) error {
+	return func(c *Client) error {
+		c.httpClient = hc
+		return nil
+	}
+}
+
+// OptUserAgent overrides the default HTTP user agent.
+func OptUserAgent(s string) func(c *Client) error {
+	return func(c *Client) error {
+		c.userAgent = s
+		return nil
+	}
+}
+
+// NewClient creates a GraphQL client targeting the specified GraphQL endpoint, using options opts.
+func NewClient(url string, opts ...func(c *Client) error) (*Client, error) {
+	// Set up default client.
+	c := Client{
+		httpClient: http.DefaultClient,
+	}
+
+	// Apply options to client.
+	for _, o := range opts {
+		if err := o(&c); err != nil {
+			return nil, err
+		}
+	}
+
+	// Apply user agent, if set.
+	if ua := c.userAgent; ua != "" {
+		c.httpClient.Transport = setUserAgent(c.httpClient.Transport, ua)
+	}
+
+	// Set GraphQL client.
+	c.Client = graphql.NewClient(url, c.httpClient)
+
+	return &c, nil
 }
 
 func (c *Client) Create(ctx context.Context, spec schema.WorkflowSpec) (Workflow, error) {
