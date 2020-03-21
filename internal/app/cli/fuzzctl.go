@@ -20,6 +20,12 @@ var (
 
 	tokenSrc oauth2.TokenSource
 	cfg      *config.Config
+
+	// Values set during build.
+	gitVersion   = "unknown"
+	gitCommit    = "unknown"
+	gitTreeState = "unknown"
+	builtAt      = "unknown"
 )
 
 // fuzzctl flag variables
@@ -156,4 +162,5 @@ func init() {
 	FuzzctlCmd.AddCommand(listCmd)
 	FuzzctlCmd.AddCommand(loginCmd)
 	FuzzctlCmd.AddCommand(logoutCmd)
+	FuzzctlCmd.AddCommand(versionCmd)
 }

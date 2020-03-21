@@ -104,3 +104,15 @@ func (c *Client) List(ctx context.Context) ([]Workflow, error) {
 
 	return wfs, nil
 }
+
+// ServerBuildInfo retrieves build information about the server.
+func (c *Client) ServerBuildInfo(ctx context.Context) (BuildInfo, error) {
+	q := struct {
+		schema.BuildInfo `graphql:"serverBuildInfo"`
+	}{}
+
+	if err := c.Query(ctx, &q, nil); err != nil {
+		return BuildInfo{}, err
+	}
+	return convertBuildInfo(q.BuildInfo), nil
+}
