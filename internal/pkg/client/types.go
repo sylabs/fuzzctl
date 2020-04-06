@@ -2,7 +2,11 @@
 
 package client
 
-import "fmt"
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+)
 
 type User struct {
 	ID    string
@@ -37,4 +41,24 @@ type Viewer struct {
 
 func (wf Workflow) String() string {
 	return fmt.Sprintf("Name: %s, ID: %s", wf.Name, wf.ID)
+}
+
+// BuildInfo represents build information about a component.
+type BuildInfo struct {
+	GitVersion   string `json:"gitVersion"`
+	GitCommit    string `json:"gitCommit"`
+	GitTreeState string `json:"gitTreeState"`
+	BuiltAt      string `json:"builtAt"`
+	GoVersion    string `json:"goVersion"`
+	Compiler     string `json:"compiler"`
+	Platform     string `json:"platform"`
+}
+
+// String returns the string representation of bi.
+func (bi BuildInfo) String() string {
+	b := &bytes.Buffer{}
+	if err := json.NewEncoder(b).Encode(bi); err != nil {
+		return ""
+	}
+	return b.String()
 }
