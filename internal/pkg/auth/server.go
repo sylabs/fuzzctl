@@ -45,8 +45,14 @@ func (s server) error(w http.ResponseWriter, err error, code int) {
 
 // ServeHTTP handles the authorization callback.
 func (s server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	u, err := url.Parse(s.conf.RedirectURL)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 	// Ignore anything that isn't a GET to the auth endpoint.
-	if r.URL.Path != authPath {
+	if r.URL.Path != u.Path {
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
@@ -94,8 +100,12 @@ func (s server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // StartServer starts an HTTP server. The server is guaranteed to be listening when the function
 // returns.
-func (s server) StartServer(address string) (*http.Server, error) {
-	ln, err := net.Listen("tcp", address)
+func (s server) StartServer() (*http.Server, error) {
+	u, err := url.Parse(s.conf.RedirectURL)
+	if err != nil {
+		return nil, err
+	}
+	ln, err := net.Listen("tcp", u.Host)
 	if err != nil {
 		return nil, err
 	}

@@ -36,13 +36,7 @@ func Default() (*Config, error) {
 		raw: rawConfig{
 			Remotes: map[string]*remote{
 				"default": {
-					AuthConfig: authConfig{
-						Type:             AuthConfigTypeAuthCodePKCE,
-						ClientID:         "0oa24wwhwBWYa1T804x6",
-						AuthURL:          "https://dev-930666.okta.com/oauth2/default/v1/authorize",
-						TokenURL:         "https://dev-930666.okta.com/oauth2/default/v1/token",
-						LoginRedirectURL: "http://localhost:9876/authorization/callback",
-					},
+					BaseURI: DefaultBaseURI,
 				},
 			},
 		},

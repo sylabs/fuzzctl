@@ -77,7 +77,7 @@ func TestServeHTTP(t *testing.T) {
 		},
 		{
 			"BadMethod",
-			authPath,
+			"/authorization/callback",
 			"bad",
 			goodValues,
 			http.StatusOK,
@@ -87,7 +87,7 @@ func TestServeHTTP(t *testing.T) {
 		},
 		{
 			"BadState",
-			authPath,
+			"/authorization/callback",
 			http.MethodGet,
 			url.Values{
 				"state": []string{"bad"},
@@ -99,7 +99,7 @@ func TestServeHTTP(t *testing.T) {
 		},
 		{
 			"Error",
-			authPath,
+			"/authorization/callback",
 			http.MethodGet,
 			url.Values{
 				"state":             []string{goodState},
@@ -113,7 +113,7 @@ func TestServeHTTP(t *testing.T) {
 		},
 		{
 			"OK",
-			authPath,
+			"/authorization/callback",
 			http.MethodGet,
 			goodValues,
 			http.StatusOK,
@@ -123,7 +123,7 @@ func TestServeHTTP(t *testing.T) {
 		},
 		{
 			"Unauthorized",
-			authPath,
+			"/authorization/callback",
 			http.MethodGet,
 			goodValues,
 			http.StatusUnauthorized,
@@ -149,6 +149,7 @@ func TestServeHTTP(t *testing.T) {
 						AuthURL:  authServer.URL,
 						TokenURL: authServer.URL,
 					},
+					RedirectURL: "http://localhost:9876/authorization/callback",
 				},
 				state:  goodState,
 				cv:     &CodeVerifier{},

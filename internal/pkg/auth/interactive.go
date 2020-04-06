@@ -5,14 +5,9 @@ package auth
 import (
 	"context"
 	"math/rand"
-	"net/url"
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
-)
-
-const (
-	authPath = "/authorization/callback"
 )
 
 // BrowserOpener describes the interface to open an URL in a browser.
@@ -64,13 +59,8 @@ func (s *interactiveSource) Token() (*oauth2.Token, error) {
 		result: resultChan,
 	}
 
-	u, err := url.Parse(s.oc.RedirectURL)
-	if err != nil {
-		return nil, err
-	}
-
 	// Start listening for incoming connection before we open the URL to avoid a race condition.
-	hsr, err := sr.StartServer(u.Host)
+	hsr, err := sr.StartServer()
 	if err != nil {
 		return nil, err
 	}
