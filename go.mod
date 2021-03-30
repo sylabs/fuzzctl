@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
-	github.com/go-git/go-git/v5 v5.0.0
+	github.com/go-git/go-git/v5 v5.3.0
 	github.com/goreleaser/nfpm v1.2.1
 	github.com/magefile/mage v1.9.0
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f
